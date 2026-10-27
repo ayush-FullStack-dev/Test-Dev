@@ -53,7 +53,7 @@ const SearchBox = ({
                 onSubmit={(e) => e.preventDefault()}
             >
                 <input
-                    type="search"
+                    type="text"
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
                     placeholder="Search products, brands, and collections"
