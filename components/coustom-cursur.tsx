@@ -19,6 +19,7 @@ const CustomCursor = () => {
     const mouseY = useSpring(y, smoothOption);
 
     const [isVisible, setIsVisible] = useState(false);
+    
     useEffect(() => {
         if (!isDesktop) return;
 

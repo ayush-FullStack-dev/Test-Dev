@@ -32,7 +32,7 @@ const instrumentSerif = Instrument_Serif({
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState("All")
-  const listingRef = useRef<HTMLDivElement>(null)
+  const listingRef = useRef<HTMLDivElement>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(
     activeCategory === "All"
       ? PRODUCTS

@@ -21,6 +21,7 @@ const SearchBox = ({
 
     useEffect(() => {
         const query = searchText.trim().toLowerCase();
+        
         const filtered = PRODUCTS.filter((product) => {
             const matchesCategory =
                 activeCategory === "All" || product.category === activeCategory;
