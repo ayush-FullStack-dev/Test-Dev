@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import ProductCategory from "@/components/shadcn-space/blocks/product-category-04/product-category"
 import ProductListing from "@/components/shadcn-space/blocks/product-listing-01/index"
-import { PRODUCTS } from "@/lib/data"
+import { Product, PRODUCTS } from "@/lib/data"
 import {
   Truck,
   RotateCcw,
@@ -22,6 +22,7 @@ import {
 import { Icon } from "@iconify/react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import SearchBox from "@/components/search-box"
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -32,11 +33,11 @@ const instrumentSerif = Instrument_Serif({
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState("All")
   const listingRef = useRef<HTMLDivElement>(null)
-
-  const filteredProducts =
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(
     activeCategory === "All"
       ? PRODUCTS
       : PRODUCTS.filter((p) => p.category === activeCategory)
+  );
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -97,6 +98,9 @@ export default function ShopPage() {
           activeCategory={activeCategory}
           onCategoryChange={setActiveCategory}
         />
+      </div>
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 md:px-8 lg:px-16">
+        <SearchBox activeCategory={activeCategory} setFilteredProducts={setFilteredProducts} />
       </div>
       <div ref={listingRef} className="scroll-mt-24">
         <ProductListing
