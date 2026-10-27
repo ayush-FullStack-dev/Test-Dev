@@ -11,11 +11,12 @@ import { useEffect, useState } from "react";
 const CoustomCursur = () => {
     const smoothOption = {
         stiffness: 200,
-        damping: 60
+        damping: 60,
+        mass: 0.1
     }
 
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
+    const x = useMotionValue(-100);
+    const y = useMotionValue(-100);
     const mouseX = useSpring(x, smoothOption);
     const mouseY = useSpring(y, smoothOption);
 
@@ -59,7 +60,7 @@ const CoustomCursur = () => {
             style={{
                 x: mouseX,
                 y: mouseY,
-                display: isVisible ? "block" : "hidden",
+                opacity: isVisible ? 0 : 1,
                 translateX: "-50%",
                 translateY: "-50%",
             }}
