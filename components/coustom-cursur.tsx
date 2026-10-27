@@ -50,7 +50,7 @@ const CoustomCursur = () => {
                 fixed
                 top-0
                 left-0
-                z-9999
+                z-500
                 bg-white
                 mix-blend-difference
                 aspect-square

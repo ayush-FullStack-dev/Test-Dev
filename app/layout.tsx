@@ -47,8 +47,8 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
+          <CoustomCursur />
           <CartProvider>
-            <CoustomCursur />
             <WishlistProvider>{children}</WishlistProvider>
           </CartProvider>
         </ThemeProvider>

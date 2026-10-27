@@ -8,6 +8,7 @@ import Testimonials from "@/components/shadcn-space/blocks/testimonial-01/testim
 import Newsletter from "@/components/shadcn-space/blocks/newsletter-01/newsletter"
 
 import { PRODUCTS } from "@/lib/data"
+import BackToTop from "@/components/backToTop"
 
 export const metadata: Metadata = {
   title: "Nova Store | Home",
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main>
+    <main id="main-scroll">
+      <BackToTop />
       <AgencyHeroSection />
       {/* <LogoCloudDemo /> */}
       <ProductCategory />
