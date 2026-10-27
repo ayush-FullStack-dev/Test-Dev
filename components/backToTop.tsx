@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { motion } from "motion/react"
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 const BackToTop = () => {
     const isDesktop = useIsDesktop();
@@ -33,6 +34,8 @@ const BackToTop = () => {
         });
     };
 
+    if (!isDesktop) return
+    
     return (
         <motion.button
             initial={{ opacity: 0, y: 10 }}

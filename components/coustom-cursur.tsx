@@ -1,19 +1,17 @@
+
 "use client";
 
-import {
-    motion,
-    useMotionValue,
-    useSpring,
-} from "motion/react";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import { motion, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useState } from "react";
 
-
-const CoustomCursur = () => {
+const CustomCursor = () => {
+    const isDesktop = useIsDesktop();
     const smoothOption = {
         stiffness: 200,
         damping: 60,
-        mass: 0.1
-    }
+        mass: 0.1,
+    };
 
     const x = useMotionValue(-100);
     const y = useMotionValue(-100);
@@ -21,51 +19,50 @@ const CoustomCursur = () => {
     const mouseY = useSpring(y, smoothOption);
 
     const [isVisible, setIsVisible] = useState(false);
-
     useEffect(() => {
-        const hideCursor = () => setIsVisible(false);
-        const showCursor = () => setIsVisible(true);
+        if (!isDesktop) return;
 
-        window.addEventListener("mousemove", (e) => {
+        const handleMouseMove = (e: MouseEvent) => {
             x.set(e.clientX);
             y.set(e.clientY);
-        });
+            setIsVisible(true);
+        };
 
-        window.addEventListener("mouseenter", showCursor);
-        window.addEventListener("mouseleave", hideCursor);
+        const hideCursor = () => setIsVisible(false);
+
+        window.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseleave", hideCursor);
 
         return () => {
-            window.removeEventListener("mousemove", (e) => {
-                x.set(e.clientX);
-                y.set(e.clientY);
-            });
-            window.removeEventListener("mouseenter", showCursor);
-            window.removeEventListener("mouseleave", hideCursor);
+            window.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseleave", hideCursor);
         };
-    }, [x, y]);
+    }, [isDesktop, x, y]);
+
+    if (!isDesktop) return null;
 
     return (
         <motion.div
             className="
+                pointer-events-none
                 fixed
-                top-0
                 left-0
+                top-0
                 z-500
-                bg-white
-                mix-blend-difference
                 aspect-square
                 w-5
-                pointer-events-none
+                bg-white
+                mix-blend-difference
             "
             style={{
                 x: mouseX,
                 y: mouseY,
-                opacity: isVisible ? 0 : 1,
                 translateX: "-50%",
                 translateY: "-50%",
+                opacity: isVisible ? 1 : 0,
             }}
         />
-    )
-}
+    );
+};
 
-export default CoustomCursur
+export default CustomCursor;
