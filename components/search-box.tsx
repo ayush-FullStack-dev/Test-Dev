@@ -1,57 +1,82 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
-import { twMerge } from 'tailwind-merge'
-import { PRODUCTS, Product } from "@/lib/data"
+import { twMerge } from "tailwind-merge";
+import { PRODUCTS, Product } from "@/lib/data";
 
 type SearchBoxProps = {
     activeCategory: string;
     setFilteredProducts: (products: Product[]) => void;
-    className?: string
-}
+    className?: string;
+};
 
-const SearchBox = ({ activeCategory, setFilteredProducts, className }: SearchBoxProps) => {
+const SearchBox = ({
+    activeCategory,
+    setFilteredProducts,
+    className,
+}: SearchBoxProps) => {
     const [searchText, setSearchText] = useState("");
 
-    if (searchText) {
-        const categoryFilter = activeCategory === "All"
-            ? PRODUCTS
-            : PRODUCTS.filter((p) => p.category === activeCategory)
+    useEffect(() => {
+        const query = searchText.trim().toLowerCase();
+        const filtered = PRODUCTS.filter((product) => {
+            const matchesCategory =
+                activeCategory === "All" || product.category === activeCategory;
 
-        const searchFilter = categoryFilter.filter((product) =>
-            product.name.toLowerCase().includes(searchText.toLowerCase())
-        );
+            const matchesSearch = product.name
+                .toLowerCase()
+                .includes(query);
 
-        setFilteredProducts(searchFilter)
-    }
+            return matchesCategory && matchesSearch;
+        });
+
+        setFilteredProducts(filtered);
+    }, [searchText, activeCategory, setFilteredProducts]);
+
+    const clearSearch = () => {
+        setSearchText("");
+    };
+
     return (
         <div
-            className={twMerge("w-full h-12 flex items-center gap-5 px-5 py-1 rounded-xl bg-[#141414] border border-[#494948]", className)}
+            className={twMerge(
+                "flex h-12 w-full items-center gap-4 rounded-xl border border-[#494948] bg-[#141414] px-5 py-1",
+                className
+            )}
         >
-            <CiSearch
-                size={25}
-                className="text-[#5b5b5a]"
-            />
+            <CiSearch size={25} className="shrink-0 text-[#5b5b5a]" />
 
-            <form className="w-full h-full" onSubmit={(e) => (e.preventDefault())}>
+            <form
+                className="h-full min-w-0 flex-1"
+                onSubmit={(e) => e.preventDefault()}
+            >
                 <input
+                    type="search"
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
-                    placeholder="Search product, brands, and collections"
-                    className="w-full h-full border-0 outline-0 bg-transparent text-white placeholder:text-[#5D6369]"
+                    placeholder="Search products, brands, and collections"
+                    className="h-full w-full border-0 bg-transparent text-white outline-none placeholder:text-[#5D6369]"
                 />
             </form>
 
-            {
-                searchText && <>
-                    <span className="h-full w-px bg-[#2B2A2B]"></span>
-                    <RxCross2 className="cursor-pointer" size={28} onClick={() => (setSearchText(""))} />
-                </>
-            }
-        </div>
-    )
-}
+            {searchText && (
+                <>
+                    <span className="h-6 w-px shrink-0 bg-[#2B2A2B]" />
 
-export default SearchBox
+                    <button
+                        type="button"
+                        onClick={clearSearch}
+                        aria-label="Clear search"
+                        className="shrink-0 text-white/70 transition-colors hover:text-white"
+                    >
+                        <RxCross2 size={24} />
+                    </button>
+                </>
+            )}
+        </div>
+    );
+};
+
+export default SearchBox;
